@@ -1,0 +1,30 @@
+{
+  "name": "discord-template-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SimpleDiscordBotsJS/Discord-Template-Bot.git"
+  },
+  "author": "LeonusDH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SimpleDiscordBotsJS/Discord-Template-Bot/issues"
+  },
+  "homepage": "https://github.com/SimpleDiscordBotsJS/Discord-Template-Bot#readme",
+  "dependencies": {
+    "@distube/spotify": "^1.0.0",
+    "ascii-table": "^0.0.9",
+    "discord.js": "^13.3.1",
+    "distube": "^3.0.4",
+    "ffmpeg-static": "^4.4.0",
+    "glob": "^7.2.0",
+    "libsodium-wrappers": "^0.7.9",
+    "yt-search": "^0.1.1",
+    "ytdl-core": "^4.9.2"
+  }
+}
