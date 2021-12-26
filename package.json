@@ -1,22 +1,15 @@
 {
-  "name": "discord-template-bot",
+  "name": "discord-music-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a music bot for your Discord server.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SimpleDiscordBotsJS/Discord-Template-Bot.git"
-  },
   "author": "LeonusDH",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/SimpleDiscordBotsJS/Discord-Template-Bot/issues"
-  },
-  "homepage": "https://github.com/SimpleDiscordBotsJS/Discord-Template-Bot#readme",
   "dependencies": {
+    "@distube/soundcloud": "^1.0.0",
     "@distube/spotify": "^1.0.0",
     "ascii-table": "^0.0.9",
     "discord.js": "^13.3.1",
@@ -26,5 +19,14 @@
     "libsodium-wrappers": "^0.7.9",
     "yt-search": "^0.1.1",
     "ytdl-core": "^4.9.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SimpleDiscordBotsJS/Discord-Music-Bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SimpleDiscordBotsJS/Discord-Music-Bot/issues"
+  },
+  "homepage": "https://github.com/SimpleDiscordBotsJS/Discord-Music-Bot#readme"
 }

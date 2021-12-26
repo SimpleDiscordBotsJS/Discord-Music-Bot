@@ -11,6 +11,33 @@ module.exports = {
         { name: "volume", description: "Alter the volume", type: "SUB_COMMAND",
             options: [{ name: "percent", description: "10 = 10%", type: "NUMBER", required: true }]
         },
+        {
+            name: "seek", description: "Seeks to the specified position.", value: "seek", type: "SUB_COMMAND",
+            options: [{ name: "time", description: "Provide a position (in seconds) to seek.", type: "NUMBER", required: true }]
+
+        },
+        {
+            name: "filters", description: "Toggle filters", type: "SUB_COMMAND",
+            options: [{ name: "set", description: "Choose a filter", type: "STRING", required: true,
+            choices: [
+                {name: "🔌 Turn off all filters", value: "false"},
+                {name: "📣 Toggle 8d filter", value: "8d"},
+                {name: "📣 Toggle bassboost filter", value: "bassboost"},
+                {name: "📣 Toggle echo filter", value: "echo"},
+                {name: "📣 Toggle nightcore filter", value: "nightcore"},
+                {name: "📣 Toggle surround filter", value: "surround"},
+                {name: "📣 Toggle karaoke filter", value: "karaoke"},
+                {name: "📣 Toggle vaporwave filter", value: "vaporwave"},
+                {name: "📣 Toggle flanger filter", value: "flanger"},
+                {name: "📣 Toggle gate filter", value: "gate"},
+                {name: "📣 Toggle haas filter", value: "haas"},
+                {name: "📣 Toggle reverse filter", value: "reverse"},
+                {name: "📣 Toggle mcompand filter", value: "mcompand"},
+                {name: "📣 Toggle phaser filter", value: "phaser"},
+                {name: "📣 Toggle tremolo filter", value: "tremolo"},
+                {name: "📣 Toggle earwax filter", value: "earwax"}
+            ]}]
+        },
         { name: "settings", description: "Select an option.", type: "SUB_COMMAND",
             options: [{ name: "options", description: "Select an option.", type: "STRING", required: true,
             choices: [
@@ -21,8 +48,9 @@ module.exports = {
                 {name: "⏹ Stop Music", value: "stop"},
                 {name: "🔀 Shuffle Queue", value: "shuffle"},
                 {name: "🔄 Toggle Autoplay Modes", value: "AutoPlay"},
-                {name: "🈁 Add a Related Song", value: "RelatedSong"},
-                {name: "🔁 Toggle Repeat Mod", value: "RepeatMode"}
+                {name: "🔼 Add a Related Song", value: "RelatedSong"},
+                {name: "🔁 Toggle Repeat Mod", value: "RepeatMode"},
+                {name: "⏮ Play Previous Song", value: "previous"}
             ]}]
         }
     ],
@@ -52,6 +80,15 @@ module.exports = {
 
                     client.distube.setVolume(VoiceChannel, Volume);
                     return interaction.reply({content: `📶 Volume has been set to \`${Volume}%\``});
+                }
+                //===========================================================
+                case "seek" : {
+                    const queue = await client.distube.getQueue(VoiceChannel);
+                    const Time = options.getNumber("time");
+                    if(!queue) return interaction.reply({content: "⛔ There is no queue"});
+
+                    await queue.seek(Time);
+                    return interaction.reply({content: `⏩ **Seeked to \`${Time}\`**`});
                 }
                 //===========================================================
                 case "settings" : {
@@ -85,11 +122,15 @@ module.exports = {
                         //================================================================
                         case "RelatedSong" :
                         await queue.addRelatedSong(VoiceChannel);
-                        return interaction.reply({content: "🈁 A related song has been added to the queue."});
+                        return interaction.reply({content: "🔼 A related song has been added to the queue."});
                         //================================================================
                         case "RepeatMode" :
                         let Mode2 = await client.distube.setRepeatMode(queue);
                         return interaction.reply({content: `🔁 Repeat Mode is set to: ${Mode2 = Mode2 ? Mode2 == 2 ? "Queue" : "Song" : "Off"}`});
+                        //================================================================
+                        case "previous" :
+                        await queue.previous(VoiceChannel);
+                        return interaction.reply({content: "⏮ Playing Previous Track."});
                         //================================================================
                         case "queue" :
                         return interaction.reply({embeds: [new MessageEmbed()
@@ -100,6 +141,77 @@ module.exports = {
                         //================================================================
                     }
                     return;
+                }
+                case "filters" : {
+                    const queue = await client.distube.getQueue(VoiceChannel);
+                    if(!queue) return interaction.reply({content: "⛔ There is no queue"});
+
+                    switch(options.getString("set")) {
+                        case "false" : 
+                        await queue.setFilter(false);
+                        return interaction.reply({content: `❎ Disabled all filters.`});
+                        //================================================================
+                        case "8d" : 
+                        await queue.setFilter(`3d`);
+                        return interaction.reply({content: `✅ Toggled the 8D filter.`});
+                        //================================================================
+                        case "karaoke" : 
+                        await queue.setFilter(`karaoke`);
+                        return interaction.reply({content: `✅ Toggled the karaoke filter.`});
+                        //================================================================
+                        case "vaporwave" : 
+                        await queue.setFilter(`vaporwave`);
+                        return interaction.reply({content: `✅ Toggled the vaporwave filter.`});
+                        //================================================================
+                        case "flanger" : 
+                        await queue.setFilter(`flanger`);
+                        return interaction.reply({content: `✅ Toggled the flanger filter.`});
+                        //================================================================
+                        case "gate" : 
+                        await queue.setFilter(`gate`);
+                        return interaction.reply({content: `✅ Toggled the gate filter.`});
+                        //================================================================
+                        case "haas" : 
+                        await queue.setFilter(`haas`);
+                        return interaction.reply({content: `✅ Toggled the haas filter.`});
+                        //================================================================
+                        case "reverse" : 
+                        await queue.setFilter(`reverse`);
+                        return interaction.reply({content: `✅ Toggled the reverse filter.`});
+                        //================================================================
+                        case "mcompand" : 
+                        await queue.setFilter(`mcompand`);
+                        return interaction.reply({content: `✅ Toggled the mcompand filter.`});
+                        //================================================================
+                        case "phaser" : 
+                        await queue.setFilter(`phaser`);
+                        return interaction.reply({content: `✅ Toggled the phaser filter.`});
+                        //================================================================
+                        case "tremolo" : 
+                        await queue.setFilter(`tremolo`);
+                        return interaction.reply({content: `✅ Toggled the tremolo filter.`});
+                        //================================================================
+                        case "earwax" : 
+                        await queue.setFilter(`earwax`);
+                        return interaction.reply({content: `✅ Toggled the earwax filter.`});
+                        //================================================================
+                        case "bassboost" : 
+                        await queue.setFilter(`bassboost`);
+                        return interaction.reply({content: `✅ Toggled the bassboost filter.`});
+                        //================================================================
+                        case "echo" : 
+                        await queue.setFilter(`echo`);
+                        return interaction.reply({content: `✅ Toggled the echo filter.`});
+                        //================================================================
+                        case "nightcore" : 
+                        await queue.setFilter(`nightcore`);
+                        return interaction.reply({content: `✅ Toggled the nightcore filter.`});
+                        //================================================================
+                        case "surround" : 
+                        await queue.setFilter(`surround`);
+                        return interaction.reply({content: `✅ Toggled the surround filter.`});
+                        //================================================================
+                    }
                 }
             }
         } catch (e) {
