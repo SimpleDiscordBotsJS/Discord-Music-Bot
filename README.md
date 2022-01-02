@@ -27,8 +27,8 @@ Advantages:
  # Attention!
  To get the channes IDs, you must enable developer mode
 
-## To run locally, you need Node.JS
- - [Download Node.JS](https://nodejs.org/en/)
+## To run locally, you need Node.JS v16
+ - [Download Node.JS v16](https://nodejs.org/en/)
 
 ## Start
  ```sh

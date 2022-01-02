@@ -2,7 +2,7 @@
   "name": "discord-music-bot",
   "version": "1.0.0",
   "description": "This is a music bot for your Discord server.",
-  "main": "index.js",
+  "main": "./Structures/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,15 +12,14 @@
     "@distube/soundcloud": "^1.0.0",
     "@distube/spotify": "^1.0.0",
     "ascii-table": "^0.0.9",
-    "discord.js": "^13.3.1",
-    "distube": "^3.0.4",
-    "ffmpeg-static": "^4.4.0",
+    "discord.js": "^13.5.0",
+    "distube": "^3.0.5",
+    "ffmpeg-static": "^4.4.1",
     "glob": "^7.2.0",
     "libsodium-wrappers": "^0.7.9",
-    "yt-search": "^0.1.1",
+    "yt-search": "^0.1.4",
     "ytdl-core": "^4.9.2"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SimpleDiscordBotsJS/Discord-Music-Bot.git"

@@ -1,4 +1,5 @@
 const { CommandInteraction, Client, MessageEmbed } = require("discord.js");
+const Logger = require("../../Utilites/Logger");
 
 module.exports = {
     name: "music",
@@ -215,9 +216,8 @@ module.exports = {
                 }
             }
         } catch (e) {
-            const errorEmbed = new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`⛔ Alert: ${e}`)
+            Logger.Error(e);
+            const errorEmbed = new MessageEmbed().setColor("RED").setDescription(`⛔ Alert: ${e}`);
             return interaction.reply({embeds: [errorEmbed]});
         }
     }
