@@ -12,15 +12,11 @@ module.exports = {
         { name: "volume", description: "Alter the volume", type: "SUB_COMMAND",
             options: [{ name: "percent", description: "10 = 10%", type: "NUMBER", required: true }]
         },
-        {
-            name: "seek", description: "Seeks to the specified position.", value: "seek", type: "SUB_COMMAND",
+        { name: "seek", description: "Seeks to the specified position.", value: "seek", type: "SUB_COMMAND",
             options: [{ name: "time", description: "Provide a position (in seconds) to seek.", type: "NUMBER", required: true }]
-
         },
-        {
-            name: "filters", description: "Toggle filters", type: "SUB_COMMAND",
-            options: [{ name: "set", description: "Choose a filter", type: "STRING", required: true,
-            choices: [
+        { name: "filters", description: "Toggle filters", type: "SUB_COMMAND", options: [
+            { name: "set", description: "Choose a filter", type: "STRING", required: true, choices: [
                 {name: "🔌 Turn off all filters", value: "false"},
                 {name: "📣 Toggle 8d filter", value: "8d"},
                 {name: "📣 Toggle bassboost filter", value: "bassboost"},
@@ -39,9 +35,8 @@ module.exports = {
                 {name: "📣 Toggle earwax filter", value: "earwax"}
             ]}]
         },
-        { name: "settings", description: "Select an option.", type: "SUB_COMMAND",
-            options: [{ name: "options", description: "Select an option.", type: "STRING", required: true,
-            choices: [
+        { name: "settings", description: "Select an option.", type: "SUB_COMMAND", options: [
+            { name: "options", description: "Select an option.", type: "STRING", required: true, choices: [
                 {name: "🔢 View Queue", value: "queue"},
                 {name: "⏭ Skip Song", value: "skip"},
                 {name: "⏸ Pause Song", value: "pause"},

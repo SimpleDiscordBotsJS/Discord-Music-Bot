@@ -17,8 +17,7 @@ Advantages:
 ## Customizing the Config.json File
  ```js
  {
-    "BOT_TOKEN": "Enter_discord_bot_token",
-    "GUILD_ID": "Enter_guild_id"
+    "BOT_TOKEN": "Enter_discord_bot_token"
  }
  ```
  
