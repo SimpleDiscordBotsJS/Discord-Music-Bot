@@ -6,14 +6,14 @@ module.exports = {
     description: "Complite music system",
     permission: "ADMINISTRATOR",
     options: [
-        { name: "play", description: "Play a song.", type: "SUB_COMMAND",
-            options: [{ name: "query", description: "Provide a name or a url for the song", type: "STRING", required: true }]
+        { name: "play", description: "Play a song.", type: "SUB_COMMAND", options: [
+            { name: "query", description: "Provide a name or a url for the song", type: "STRING", required: true }]
         },
-        { name: "volume", description: "Alter the volume", type: "SUB_COMMAND",
-            options: [{ name: "percent", description: "10 = 10%", type: "NUMBER", required: true }]
+        { name: "volume", description: "Alter the volume", type: "SUB_COMMAND", options: [
+            { name: "percent", description: "10 = 10%", type: "NUMBER", required: true }]
         },
-        { name: "seek", description: "Seeks to the specified position.", value: "seek", type: "SUB_COMMAND",
-            options: [{ name: "time", description: "Provide a position (in seconds) to seek.", type: "NUMBER", required: true }]
+        { name: "seek", description: "Seeks to the specified position.", value: "seek", type: "SUB_COMMAND", options: [
+            { name: "time", description: "Provide a position (in seconds) to seek.", type: "NUMBER", required: true }]
         },
         { name: "filters", description: "Toggle filters", type: "SUB_COMMAND", options: [
             { name: "set", description: "Choose a filter", type: "STRING", required: true, choices: [
@@ -66,7 +66,7 @@ module.exports = {
         try {
             switch(options.getSubcommand()) {
                 case "play" :  {
-                    client.distube.playVoiceChannel( VoiceChannel, options.getString("query"), { textChannel: channel, member: member });
+                    client.distube.play( VoiceChannel, options.getString("query"), { textChannel: channel, member: member });
                     return interaction.reply({content: "🎼 Request recieved."});
                 }
                 //===========================================================
@@ -105,7 +105,7 @@ module.exports = {
                         return interaction.reply({content: "⏸ Song has been paused."});
                         //================================================================
                         case "resume" :
-                        await queue.pause(VoiceChannel);
+                        await queue.resume(VoiceChannel);
                         return interaction.reply({content: "⏯ Song has been resumed."});
                         //================================================================
                         case "shuffle" :
@@ -212,8 +212,8 @@ module.exports = {
             }
         } catch (e) {
             Logger.Error(e);
-            const errorEmbed = new MessageEmbed().setColor("RED").setDescription(`⛔ Alert: ${e}`);
-            return interaction.reply({embeds: [errorEmbed]});
+            const eEmbed = new MessageEmbed().setColor("RED").setTitle("⛔ **ERROR** ⛔").setDescription(e);
+            return interaction.reply({embeds: [eEmbed]});
         }
     }
 }
