@@ -1,5 +1,7 @@
 /* Logger by LeonusDH (aka RADIO) */
 
+/* Logger version 1.3.1 */
+
 //===========================================================//
 
 const fs = require("fs");
@@ -11,46 +13,66 @@ const logFileName = "Latest";
 //var time = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '').split(" ")[1]; - Old time var
 
 //===========================================================//
-function Info(text) {
-    console.info(construct('console') + `\x1b[1;32m[  INFO  ]:  ` + text + `\x1b[0m`);
-    writeFile(logFilePath + '/' + logFileName, `[  INFO  ]:  ` + text);
+function Debug() {
+    for(var i = 0; i < arguments.length; i++) {
+        construct(`\x1b[1;35m[  DEBUG  ]: ` + arguments[i]);
+        writeFile(`[  DEBUG  ]: ` + arguments[i]);
+    }
 }
 
 //===========================================================//
-function Success(text) {
-    console.log(construct('console') + `\x1b[34m[ SUCCESS ]: ` + text + `\x1b[0m`);
-    writeFile(logFilePath + '/' + logFileName, `[ SUCCESS ]: ` + text);
+function Error() {
+    for(var i = 0; i < arguments.length; i++) {
+        construct(`\x1b[1;31m[  ERROR  ]: ` + arguments[i]);
+        writeFile(`[  ERROR  ]: ` + arguments[i]);
+    }
 }
 
 //===========================================================//
-function Message(text) {
-    console.log(construct('console') + `\x1b[0m[ MESSAGE ]: ` + text + `\x1b[0m`);
-    writeFile(logFilePath + '/' + logFileName, `[ MESSAGE ]: ` + text);
+function Info() {
+    for(var i = 0; i < arguments.length; i++) {
+        construct(`\x1b[1;32m[  INFO  ]:  ` + arguments[i]);
+        writeFile(`[  INFO  ]:  ` + arguments[i]);
+    }
 }
 
 //===========================================================//
-function Warning(text) {
-    console.warn(construct('console') + `\x1b[1;33m[ WARNING ]: ` + text + `\x1b[0m`);
-    writeFile(logFilePath + '/' + logFileName, `[ WARNING ]: ` + text);
+function Message() {
+    for(var i = 0; i < arguments.length; i++) {
+        construct(`\x1b[0m[ MESSAGE ]: ` + arguments[i]);
+        writeFile(`[ MESSAGE ]: ` + arguments[i]);
+    }
 }
 
 //===========================================================//
-function Error(text) {
-    console.error(construct('console') + `\x1b[1;31m[  ERROR  ]: ` + text + `\x1b[0m`);
-    writeFile(logFilePath + '/' + logFileName, `[  ERROR  ]: ` + text);
+function Success() {
+    for(var i = 0; i < arguments.length; i++) {
+        construct(`\x1b[1;36m[ SUCCESS ]: ` + arguments[i]);
+        writeFile(`[ SUCCESS ]: ` + arguments[i]);
+    }
+}
+
+//===========================================================//
+function Warning() {
+    for(var i = 0; i < arguments.length; i++) {
+        construct(`\x1b[1;33m[ WARNING ]: ` + arguments[i]);
+        writeFile(`[ WARNING ]: ` + arguments[i]);
+    }
 }
 
 //===========================================================//
 
-exports.Info = Info;
-exports.Success = Success;
-exports.Message = Message;
-exports.Warning = Warning;
+exports.Debug = Debug;
 exports.Error = Error;
+exports.Info = Info;
+exports.Message = Message;
+exports.Success = Success;
+exports.Warning = Warning;
 
 //===========================================================//
-function writeFile(path, content) {
+function writeFile(content) {
     var newContent = content;
+    var path = logFilePath + '/' + logFileName;
 
     try {
         if(!fs.existsSync(logFilePath)) {
@@ -68,15 +90,15 @@ function writeFile(path, content) {
         Error(err) 
     }
 
-    fs.appendFile(path, construct('file') + newContent + "\r\n", function(err) {
+    const date = new Date().toLocaleDateString();
+    const time = new Date().toLocaleTimeString();
+    fs.appendFile(path, `[ ${date} ][ ${time} ]` + newContent + "\r\n", function(err) {
         if(err) return Error(err);
     });
 }
 
 //===========================================================//
-function construct(opt) {
-    const date = new Date().toLocaleDateString();
+function construct(str) {
     const time = new Date().toLocaleTimeString();
-    if(opt == 'console') return `[ \x1b[1;36m${time}\x1b[0m ]`;
-    else if(opt == 'file') return `[ ${date} ][ ${time} ]`;
+    return console.log(`[ \x1b[1;36m${time}\x1b[0m ]` + str + `\x1b[0m`);
 }

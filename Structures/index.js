@@ -5,7 +5,7 @@ const Logger = require("../Utilites/Logger"); // Загрузка логгера
 const { promisify } = require("util");
 const { glob } = require("glob");
 const PG = promisify(glob);
-const Ascii = require("ascii-table");
+const { AsciiTable3 } = require("ascii-table3");
 
 //===========================================================
 
@@ -18,7 +18,7 @@ const { SpotifyPlugin } = require("@distube/spotify");
 const { SoundCloudPlugin } = require("@distube/soundcloud");
 
 client.distube = new DisTube(client, {
-    nsfw: false, searchSongs: 10, youtubeDL: true,
+    nsfw: false, youtubeDL: true,
     emptyCooldown: 25, searchCooldown: 5,
     leaveOnStop: false, leaveOnEmpty: true,
     leaveOnFinish: true, updateYouTubeDL: true,
@@ -31,7 +31,7 @@ module.exports = client;
 //===========================================================
 
 ["Events", "Commands"].forEach(handler => {
-    require(`./Handlers/${handler}`)(client, PG, Ascii);
+    require(`./Handlers/${handler}`)(client, PG, AsciiTable3);
 });
 
 //===========================================================

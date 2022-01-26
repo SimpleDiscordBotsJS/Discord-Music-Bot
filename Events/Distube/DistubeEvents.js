@@ -6,7 +6,16 @@ const status = queue => `Volume: \`${queue.volume}%\` | Filter: \`${queue.filter
 client.distube
     //===========================================================
     .on("playSong", (queue, song) => { queue.textChannel.send({embeds: [new MessageEmbed().setColor("GREEN")
-        .setDescription(`🎶 | Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}\n${status(queue)}`)]});
+        .setDescription(`🎶 | Playing \`${song.name}\``).addFields(
+            { name: "Requested", value: `${song.user}`, inline: true },
+            { name: "Volume", value: `\`${queue.volume}%\``, inline: true },
+            { name: "Duration", value: `\`${song.formattedDuration}\``, inline: true },
+            { name: "Autoplay", value: `\`${queue.autoplay ? "On" : "Off"}\``, inline: true },
+            { name: "Loop", value: `\`${queue.repeatMode ? queue.repeatMode === 2 ? "All Queue" : "This Song" : "Off"}\``, inline: true },
+            { name: "Filters", value: `\`${queue.filters.join(", ") || "Off"}\``, inline: true }
+            )]
+        });
+        
         Logger.Success(`🎶 | Playing '${song.name}' - '${song.formattedDuration}'`);
         Logger.Info(`Requested by: ${song.user.tag} - ${status(queue)}`);
         Logger.Info('=============================');
@@ -14,7 +23,11 @@ client.distube
 
     //===========================================================
     .on("addSong", (queue, song) => { queue.textChannel.send({embeds: [new MessageEmbed().setColor("GREEN")
-        .setDescription(`🎶 | Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`)]});
+        .setDescription(`🎶 | Added \`${song.name}\``).addFields(
+            { name: "Requested", value: `${song.user}`, inline: true },
+            { name: "Duration", value: `\`${song.formattedDuration}\``, inline: true },
+            { name: "Source", value: `\`${song.source}\``, inline: true }
+        )]});
         Logger.Info(`🎶 | Added ${song.name} - '${song.formattedDuration}' to the queue by ${song.user}`);
         Logger.Info('=============================');
     })
@@ -44,38 +57,6 @@ client.distube
     .on("empty", queue => { queue.textChannel.send({embeds: [new MessageEmbed().setColor("RED")
         .setDescription(`Voice channel is empty! Leaving the channel...`)]});
         Logger.Error(`🎶 | Voice channel is empty! Leaving the channel...`);
-        Logger.Info('=============================');
-    })
-
-    //===========================================================
-    .on("searchResult", (message, result) => { let i = 0; message.channel.send({embeds: [new MessageEmbed()
-        .setColor("GREEN").setDescription(`🎶 | **Choose an option from below**\n${result
-            .map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``)
-            .join("\n")}\n*Enter anything else or wait 30 seconds to cancel*`)]});
-        Logger.Info(`🎶 | Choose an option from below\n${result
-            .map(song => `${++i}. ${song.name} - \`${song.formattedDuration}\``)
-            .join("\n")}\nEnter anything else or wait 30 seconds to cancel`);
-        Logger.Info('=============================');
-    })
-
-    //===========================================================
-    .on("searchCancel", message => { message.channel.send({embeds: [new MessageEmbed().setColor("RED")
-        .setDescription(`⛔ | Searching canceled!`)]});
-        Logger.Error(`🎶 | ⛔ | Searching canceled!`);
-        Logger.Info('=============================');
-    })
-
-    //===========================================================
-    .on("searchInvalidAnswer", message => { message.channel.send({embeds: [new MessageEmbed().setColor("RED")
-        .setDescription(`⛔ | Invalid number of result.`)]});
-        Logger.Error(`🎶 | ⛔ | Invalid number of result.`);
-        Logger.Info('=============================');
-    })
-
-    //===========================================================
-    .on("searchNoResult", message => { message.channel.send({embeds: [new MessageEmbed().setColor("RED")
-        .setDescription(`⛔ | No result found!`)]});
-        Logger.Error(`🎶 | ⛔ | No result found!`);
         Logger.Info('=============================');
     })
     

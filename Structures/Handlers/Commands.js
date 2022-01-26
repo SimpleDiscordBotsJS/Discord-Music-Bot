@@ -1,11 +1,7 @@
 const { Perms } = require("../Validation/Permissions");
-const { Client } = require("discord.js");
 
-/**
- * @param {Client} client
- */
-module.exports = async(client, PG, Ascii) => {
-    const Table = new Ascii("Command Loaded");
+module.exports = async(client, PG, AsciiTable3) => {
+    const Table = new AsciiTable3("Command Loaded");
 
     CommandsArray = [];
 
@@ -26,7 +22,7 @@ module.exports = async(client, PG, Ascii) => {
         client.commands.set(command.name, command);
         CommandsArray.push(command);
 
-        await Table.addRow(command.name, "🔹 SUCCESSFUL");
+        await Table.addRow(command.name, "SUCCESSFUL");
     })
 
     console.log(Table.toString());
