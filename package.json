@@ -13,7 +13,7 @@
     "@discordjs/voice": "^0.8.0",
     "@distube/soundcloud": "^1.1.0",
     "@distube/spotify": "^1.1.0",
-    "ascii-table3": "^0.7.0",
+    "ascii-table3": "^0.7.4",
     "discord.js": "^13.6.0",
     "distube": "^3.3.3",
     "ffmpeg-static": "^4.4.1",
