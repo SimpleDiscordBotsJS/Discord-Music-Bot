@@ -6,8 +6,9 @@ Advantages:
  - All setup in one file
  - Checking for the server (It is necessary so that when using the bot on several servers, no crashes occur)
 
-# Instructions
+---
 
+> # Instructions
 ## Discord Bot:
  - [Create application](https://discord.com/developers/applications)
  - Add a bot to it (Bot section)
@@ -17,14 +18,13 @@ Advantages:
 ## Customizing the Config.json File
  ```js
  {
-    "BOT_TOKEN": "Enter_discord_bot_token"
+    "BOT_TOKEN": "Enter_discord_bot_token",
+
+    "DEBUG_EVENT": false
  }
  ```
  
  The bot token can be copied in the Bot section of [your application](https://discord.com/developers/applications)
- 
- # Attention!
- To get the channes IDs, you must enable developer mode
 
 ## To run locally, you need Node.JS v16
  - [Download Node.JS v16](https://nodejs.org/en/)
@@ -33,6 +33,3 @@ Advantages:
  ```sh
  node .
  ```
-
-# TODO
- none
