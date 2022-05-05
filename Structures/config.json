@@ -1,3 +1,5 @@
 {
-    "BOT_TOKEN": "Enter_discord_bot_token"
+    "BOT_TOKEN": "Enter_discord_bot_token",
+
+    "DEBUG_EVENT": false
 }
