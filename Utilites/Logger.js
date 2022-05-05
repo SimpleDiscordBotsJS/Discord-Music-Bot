@@ -1,12 +1,12 @@
 /* Logger by LeonusDH (aka RADIO) */
 
-/* Logger version 1.3.1 */
+/* Logger version 1.3.2 */
 
 //===========================================================//
 
 const fs = require("fs");
 const logFilePath = "./Structures/Logs";
-const logFileName = "Latest";
+const logFileName = "Latest.log";
 
 //===========================================================//
 
