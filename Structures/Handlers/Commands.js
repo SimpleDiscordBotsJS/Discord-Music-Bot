@@ -9,14 +9,14 @@ module.exports = async(client, PG, AsciiTable3) => {
         const command = require(file);
 
         if(!command.name)
-        return Table.addRow(file.split("/")[7], "🔸 FAILED", "Missing a name.");
+        return Table.addRow(file.split("/")[7], "✘ FAILED", "Missing a name.");
 
         if(!command.context && !command.description)
-        return Table.addRow(command.name, "🔸 FAILED", "Missing a description.");
+        return Table.addRow(command.name, "✘ FAILED", "Missing a description.");
 
         if(command.permission) {
             if(Perms.includes(command.permission)) command.defaultPermission = false;
-            else return Table.addRow(command.name, "🔸 FAILED", "Permission is invalid.");
+            else return Table.addRow(command.name, "✘ FAILED", "Permission is invalid.");
         }
 
         client.commands.set(command.name, command);
@@ -27,30 +27,11 @@ module.exports = async(client, PG, AsciiTable3) => {
 
     console.log(Table.toString());
 
-    // PERMISSIONS CHECK //
+    // =================================================== //
 
     client.on("ready", async () => {
         client.guilds.cache.forEach((g) => {
-            g.commands.set(CommandsArray).then(async(command) => {
-                const Roles = (commandName) => {
-                    const cmdPerms = CommandsArray.find((c) => c.name === commandName).permission;
-                    if(!cmdPerms) return null;
-    
-                    return g.roles.cache.filter((r) => r.permissions.has(cmdPerms));
-                }
-    
-                const fullPermissions = command.reduce((accumulator, r) => {
-                    const roles = Roles(r.name);
-                    if(!roles) return accumulator;
-    
-                    const permissions = roles.reduce((a, r) => {
-                        return [...a, {id: r.id, type: "ROLE", permission: true}]
-                    }, []);
-                    return [...accumulator, {id: r.id, permissions}]
-                }, []);
-    
-                await g.commands.permissions.set({ fullPermissions });
-            });
+            g.commands.set(CommandsArray);
         });
     });
 }
