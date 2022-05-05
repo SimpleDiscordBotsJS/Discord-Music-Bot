@@ -1,7 +1,7 @@
-const Discord = require("discord.js"); // Библиотека
-const client = new Discord.Client({ intents: 32767 }); // Создание клиента
-const config = require("./config.json"); // Загрузка конфига
-const Logger = require("../Utilites/Logger"); // Загрузка логгера
+const { Client, Collection } = require("discord.js");
+const client = new Client({ intents: 32767 });
+const { BOT_TOKEN } = require("./config.json");
+const { Warning, Error, Success } = require("../Utilites/Logger");
 const { promisify } = require("util");
 const { glob } = require("glob");
 const PG = promisify(glob);
@@ -9,7 +9,8 @@ const { AsciiTable3 } = require("ascii-table3");
 
 //===========================================================
 
-client.commands = new Discord.Collection();
+client.commands = new Collection();
+client.buttons = new Collection();
 
 //===========================================================
 
@@ -30,52 +31,65 @@ module.exports = client;
 
 //===========================================================
 
-["Events", "Commands"].forEach(handler => {
+["Events", "Commands", "Buttons"].forEach(handler => {
     require(`./Handlers/${handler}`)(client, PG, AsciiTable3);
 });
 
 //===========================================================
 
-client.on("error", (error) => { Logger.Error(error) });
-client.on("warn", (error) => { Logger.Warning(error) });
-// client.on("debug", (message) => { Logger.Info(message) }); // Debug
+// Anti-Crash and more...
+process.on("unhandledRejection", (reason, p) => { Warning(
+    '=== unhandled Rejection ==='.toUpperCase(),
+    'Reason: ' + reason.stack ? String(reason.stack) : String(reason),
+    '==========================='.toUpperCase());
+});
+
+process.on("uncaughtException", (err, origin) => { Error(
+    '=== uncaught Exception ==='.toUpperCase(),
+    'Exception: ' + err.stack ? err.stack : err,
+    '==========================='.toUpperCase());
+});
+
+process.on('uncaughtExceptionMonitor', (err, origin) => { Error(
+    '=== uncaught Exception Monitor ==='.toUpperCase());
+});
+
+process.on('beforeExit', (code) => { Warning(
+    '======= before Exit ======='.toUpperCase(),
+    'Code: ' + code,
+    '==========================='.toUpperCase());
+});
+
+process.on('warning', (code) => { Warning(
+    '========= warning ========='.toUpperCase(),
+    'Code: ' + code,
+    '==========================='.toUpperCase());
+});
+
+process.on('exit', (code) => { Warning(
+    '========== exit =========='.toUpperCase(), 
+    'Code: ' + code,
+    '=========================='.toUpperCase());
+});
+
+process.on('multipleResolves', (type, promise, reason) => { Warning(
+    '==== multiple Resolves ===='.toUpperCase(),
+    type, promise, reason,
+    '==========================='.toUpperCase());
+});
 
 //===========================================================
 
-// Анти-краш и прочее...
-process.on("unhandledRejection", (reason, p) => {
-    Logger.Warning('=== unhandled Rejection ==='.toUpperCase());
-    Logger.Warning('Reason: ' + reason.stack ? String(reason.stack) : String(reason));
-    Logger.Warning('==========================='.toUpperCase());
-});
-process.on("uncaughtException", (err, origin) => {
-    Logger.Error('=== uncaught Exception ==='.toUpperCase());
-    Logger.Error('Exception: ' + err.stack ? err.stack : err);
-    Logger.Error('==========================='.toUpperCase());
-});
-process.on('uncaughtExceptionMonitor', (err, origin) => {
-    Logger.Error('=== uncaught Exception Monitor ==='.toUpperCase());
-});
-process.on('beforeExit', (code) => {
-    Logger.Warning('======= before Exit ======='.toUpperCase());
-    Logger.Warning('Code: ' + code);
-    Logger.Warning('==========================='.toUpperCase());
-});
-process.on('exit', (code) => {
-    Logger.Warning('========== exit =========='.toUpperCase());
-    Logger.Warning('Code: ' + code);
-    Logger.Warning('=========================='.toUpperCase());
-});
-process.on('multipleResolves', (type, promise, reason) => {
-    Logger.Warning('==== multiple Resolves ===='.toUpperCase());
-    Logger.Warning(type); Logger.Warning(promise); Logger.Warning(reason);
-    Logger.Warning('==========================='.toUpperCase());
+
+client.login(BOT_TOKEN).catch(() => {
+    Error("[BOT] Invalid Bot Login Token.");
+    process.exit();
 });
 
 //===========================================================
 
-// Подключение к боту и вывод ошибки в случае отсутствия токена, или если токен неверен.
-client.login(config.BOT_TOKEN).catch(() => Logger.Error("⛔ Invalid Bot Login Token."));
 
-// Завершение работы
-process.on("SIGINT", () => { Logger.Success("SIGINT detected, exiting..."); process.exit(0); });
+process.on("SIGINT", () => { 
+    Success("SIGINT detected, exiting..."); 
+    process.exit(); 
+});

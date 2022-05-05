@@ -1,10 +1,9 @@
 const { CommandInteraction, Client, MessageEmbed } = require("discord.js");
-const Logger = require("../../Utilites/Logger");
+const { Error } = require("../../Utilites/Logger");
 
 module.exports = {
     name: "music",
     description: "Complite music system",
-    permission: "ADMINISTRATOR",
     options: [
         { name: "play", description: "Play a song.", type: "SUB_COMMAND", options: [
             { name: "query", description: "Provide a name or a url for the song", type: "STRING", required: true }]
@@ -67,7 +66,7 @@ module.exports = {
             switch(options.getSubcommand()) {
                 case "play" :  {
                     client.distube.play( VoiceChannel, options.getString("query"), { textChannel: channel, member: member });
-                    return interaction.reply({content: "🎼 Request recieved."});
+                    return interaction.reply({content: "🎼 Request recieved.", ephemeral: true});
                 }
                 //===========================================================
                 case "volume" : {
@@ -75,145 +74,143 @@ module.exports = {
                     if(Volume > 100 || Volume < 1) return interaction.reply({content: "You have to specify a number between 1 and 100."});
 
                     client.distube.setVolume(VoiceChannel, Volume);
-                    return interaction.reply({content: `📶 Volume has been set to \`${Volume}%\``});
+                    return interaction.reply({content: `📶 Volume has been set to \`${Volume}%\``, ephemeral: true});
                 }
                 //===========================================================
                 case "seek" : {
                     const queue = await client.distube.getQueue(VoiceChannel);
                     const Time = options.getNumber("time");
-                    if(!queue) return interaction.reply({content: "⛔ There is no queue"});
+                    if(!queue) return interaction.reply({content: "⛔ There is no queue", ephemeral: true});
 
                     await queue.seek(Time);
-                    return interaction.reply({content: `⏩ **Seeked to \`${Time}\`**`});
+                    return interaction.reply({content: `⏩ **Seeked to \`${Time}\`**`, ephemeral: true});
                 }
                 //===========================================================
                 case "settings" : {
                     const queue = await client.distube.getQueue(VoiceChannel);
 
-                    if(!queue) return interaction.reply({content: "⛔ There is no queue."});
+                    if(!queue) return interaction.reply({content: "⛔ There is no queue.", ephemeral: true});
                     switch(options.getString("options")) {
                         case "skip" :
                         await queue.skip(VoiceChannel);
-                        return interaction.reply({content: "⏭ Song has been skipped."});
+                        return interaction.reply({content: "⏭ Song has been skipped.", ephemeral: true});
                         //================================================================
                         case "stop" :
                         await queue.stop(VoiceChannel);
-                        return interaction.reply({content: "⏹ Music has been stopped."});
+                        return interaction.reply({content: "⏹ Music has been stopped.", ephemeral: true});
                         //================================================================
                         case "pause" :
                         await queue.pause(VoiceChannel);
-                        return interaction.reply({content: "⏸ Song has been paused."});
+                        return interaction.reply({content: "⏸ Song has been paused.", ephemeral: true});
                         //================================================================
                         case "resume" :
                         await queue.resume(VoiceChannel);
-                        return interaction.reply({content: "⏯ Song has been resumed."});
+                        return interaction.reply({content: "⏯ Song has been resumed.", ephemeral: true});
                         //================================================================
                         case "shuffle" :
                         await queue.shuffle(VoiceChannel);
-                        return interaction.reply({content: "🔀 The queue has been shuffled."});
+                        return interaction.reply({content: "🔀 The queue has been shuffled.", ephemeral: true});
                         //================================================================
                         case "AutoPlay" :
                         let Mode = await queue.toggleAutoplay(VoiceChannel);
-                        return interaction.reply({content: `🔄 Autoplay Mode is set to: ${Mode ? "On" : "Off"}`});
+                        return interaction.reply({content: `🔄 Autoplay Mode is set to: ${Mode ? "On" : "Off"}`, ephemeral: true});
                         //================================================================
                         case "RelatedSong" :
                         await queue.addRelatedSong(VoiceChannel);
-                        return interaction.reply({content: "🔼 A related song has been added to the queue."});
+                        return interaction.reply({content: "🔼 A related song has been added to the queue.", ephemeral: true});
                         //================================================================
                         case "RepeatMode" :
                         let Mode2 = await client.distube.setRepeatMode(queue);
-                        return interaction.reply({content: `🔁 Repeat Mode is set to: ${Mode2 = Mode2 ? Mode2 == 2 ? "Queue" : "Song" : "Off"}`});
+                        return interaction.reply({content: `🔁 Repeat Mode is set to: ${Mode2 = Mode2 ? Mode2 == 2 ? "Queue" : "Song" : "Off"}`, ephemeral: true});
                         //================================================================
                         case "previous" :
                         await queue.previous(VoiceChannel);
-                        return interaction.reply({content: "⏮ Playing Previous Track."});
+                        return interaction.reply({content: "⏮ Playing Previous Track.", ephemeral: true});
                         //================================================================
                         case "queue" :
                         return interaction.reply({embeds: [new MessageEmbed()
                         .setColor("PURPLE")
                         .setDescription(`${queue.songs.map(
                             (song, id) => `\n**${id + 1}**. ${song.name} - \`${song.formattedDuration}\``)}`)
-                        ]});
+                        ], ephemeral: true});
                         //================================================================
                     }
                     return;
                 }
                 case "filters" : {
                     const queue = await client.distube.getQueue(VoiceChannel);
-                    if(!queue) return interaction.reply({content: "⛔ There is no queue"});
+                    if(!queue) return interaction.reply({content: "⛔ There is no queue", ephemeral: true});
 
                     switch(options.getString("set")) {
                         case "false" : 
                         await queue.setFilter(false);
-                        return interaction.reply({content: `❎ Disabled all filters.`});
+                        return interaction.reply({content: `❎ Disabled all filters.`, ephemeral: true});
                         //================================================================
                         case "8d" : 
                         await queue.setFilter(`3d`);
-                        return interaction.reply({content: `✅ Toggled the 8D filter.`});
+                        return interaction.reply({content: `✅ Toggled the 8D filter.`, ephemeral: true});
                         //================================================================
                         case "karaoke" : 
                         await queue.setFilter(`karaoke`);
-                        return interaction.reply({content: `✅ Toggled the karaoke filter.`});
+                        return interaction.reply({content: `✅ Toggled the karaoke filter.`, ephemeral: true});
                         //================================================================
                         case "vaporwave" : 
                         await queue.setFilter(`vaporwave`);
-                        return interaction.reply({content: `✅ Toggled the vaporwave filter.`});
+                        return interaction.reply({content: `✅ Toggled the vaporwave filter.`, ephemeral: true});
                         //================================================================
                         case "flanger" : 
                         await queue.setFilter(`flanger`);
-                        return interaction.reply({content: `✅ Toggled the flanger filter.`});
+                        return interaction.reply({content: `✅ Toggled the flanger filter.`, ephemeral: true});
                         //================================================================
                         case "gate" : 
                         await queue.setFilter(`gate`);
-                        return interaction.reply({content: `✅ Toggled the gate filter.`});
+                        return interaction.reply({content: `✅ Toggled the gate filter.`, ephemeral: true});
                         //================================================================
                         case "haas" : 
                         await queue.setFilter(`haas`);
-                        return interaction.reply({content: `✅ Toggled the haas filter.`});
+                        return interaction.reply({content: `✅ Toggled the haas filter.`, ephemeral: true});
                         //================================================================
                         case "reverse" : 
                         await queue.setFilter(`reverse`);
-                        return interaction.reply({content: `✅ Toggled the reverse filter.`});
+                        return interaction.reply({content: `✅ Toggled the reverse filter.`, ephemeral: true});
                         //================================================================
                         case "mcompand" : 
                         await queue.setFilter(`mcompand`);
-                        return interaction.reply({content: `✅ Toggled the mcompand filter.`});
+                        return interaction.reply({content: `✅ Toggled the mcompand filter.`, ephemeral: true});
                         //================================================================
                         case "phaser" : 
                         await queue.setFilter(`phaser`);
-                        return interaction.reply({content: `✅ Toggled the phaser filter.`});
+                        return interaction.reply({content: `✅ Toggled the phaser filter.`, ephemeral: true});
                         //================================================================
                         case "tremolo" : 
                         await queue.setFilter(`tremolo`);
-                        return interaction.reply({content: `✅ Toggled the tremolo filter.`});
+                        return interaction.reply({content: `✅ Toggled the tremolo filter.`, ephemeral: true});
                         //================================================================
                         case "earwax" : 
                         await queue.setFilter(`earwax`);
-                        return interaction.reply({content: `✅ Toggled the earwax filter.`});
+                        return interaction.reply({content: `✅ Toggled the earwax filter.`, ephemeral: true});
                         //================================================================
                         case "bassboost" : 
                         await queue.setFilter(`bassboost`);
-                        return interaction.reply({content: `✅ Toggled the bassboost filter.`});
+                        return interaction.reply({content: `✅ Toggled the bassboost filter.`, ephemeral: true});
                         //================================================================
                         case "echo" : 
                         await queue.setFilter(`echo`);
-                        return interaction.reply({content: `✅ Toggled the echo filter.`});
+                        return interaction.reply({content: `✅ Toggled the echo filter.`, ephemeral: true});
                         //================================================================
                         case "nightcore" : 
                         await queue.setFilter(`nightcore`);
-                        return interaction.reply({content: `✅ Toggled the nightcore filter.`});
+                        return interaction.reply({content: `✅ Toggled the nightcore filter.`, ephemeral: true});
                         //================================================================
                         case "surround" : 
                         await queue.setFilter(`surround`);
-                        return interaction.reply({content: `✅ Toggled the surround filter.`});
+                        return interaction.reply({content: `✅ Toggled the surround filter.`, ephemeral: true});
                         //================================================================
                     }
                 }
             }
         } catch (e) {
-            Logger.Error(e);
-            const eEmbed = new MessageEmbed().setColor("RED").setTitle("⛔ **ERROR** ⛔").setDescription(e);
-            return interaction.reply({embeds: [eEmbed]});
+            Error(e);
         }
     }
 }
