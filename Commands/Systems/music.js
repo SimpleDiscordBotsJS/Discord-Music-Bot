@@ -3,6 +3,9 @@ const { Error } = require("../../Utilites/Logger");
 
 module.exports = {
     name: "music",
+    nameLocalizations: {
+        "ru": "музыка"
+    },
     description: "Complite music system",
     options: [
         { name: "play", description: "Play a song.", type: "SUB_COMMAND", options: [
